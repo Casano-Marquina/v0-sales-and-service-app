@@ -3,10 +3,10 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '@/hooks/use-auth'
 import { useWorkspace } from '@/hooks/use-workspace'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase/client'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Empty } from '@/components/ui/empty'
-import type { Transaction } from '@/lib/supabase'
+import type { Transaction } from '@/lib/types'
 
 export default function DashboardPage() {
   const { user, loading: authLoading } = useAuth()
@@ -25,6 +25,7 @@ export default function DashboardPage() {
 
     const fetchData = async () => {
       try {
+        const supabase = createClient()
         // Fetch recent transactions
         const { data: txns, error: txnError } = await supabase
           .from('transactions')

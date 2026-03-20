@@ -1,4 +1,4 @@
-import { supabaseAdmin } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
 // This endpoint should be called by a cron job (e.g., daily)
@@ -10,6 +10,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const supabaseAdmin = await createClient()
     // Get all workspaces
     const { data: workspaces, error: wsError } = await supabaseAdmin
       .from('workspaces')

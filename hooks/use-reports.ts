@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
-import type { Transaction } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase/client'
+import type { Transaction } from '@/lib/types'
 
 export interface MonthlyStats {
   year: number
@@ -25,6 +25,7 @@ export function useReports(workspaceId?: string) {
 
       try {
         setLoading(true)
+        const supabase = createClient()
 
         // Get all transactions for the month
         const startDate = new Date(year, month - 1, 1).toISOString().split('T')[0]

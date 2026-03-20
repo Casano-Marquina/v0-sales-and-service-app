@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
-import type { Transaction, TransactionType, PaymentStatus, Category } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase/client'
+import type { Transaction, TransactionType, PaymentStatus, Category } from '@/lib/types'
 
 export function useTransactions(workspaceId?: string, userId?: string) {
   const [transactions, setTransactions] = useState<Transaction[]>([])
@@ -18,6 +18,7 @@ export function useTransactions(workspaceId?: string, userId?: string) {
     const fetchData = async () => {
       try {
         setLoading(true)
+        const supabase = createClient()
         const { data: txns, error: txnError } = await supabase
           .from('transactions')
           .select('*')
@@ -50,6 +51,7 @@ export function useTransactions(workspaceId?: string, userId?: string) {
       if (!workspaceId || !userId) throw new Error('Missing workspace or user')
 
       try {
+        const supabase = createClient()
         const { data, error: err } = await supabase
           .from('transactions')
           .insert([{ ...transaction, workspace_id: workspaceId, created_by: userId }])
@@ -70,6 +72,7 @@ export function useTransactions(workspaceId?: string, userId?: string) {
   const updateTransaction = useCallback(
     async (id: string, updates: Partial<Transaction>) => {
       try {
+        const supabase = createClient()
         const { data, error: err } = await supabase
           .from('transactions')
           .update({ ...updates, updated_by: userId })
@@ -90,6 +93,7 @@ export function useTransactions(workspaceId?: string, userId?: string) {
 
   const deleteTransaction = useCallback(async (id: string) => {
     try {
+      const supabase = createClient()
       const { error: err } = await supabase.from('transactions').delete().eq('id', id)
 
       if (err) throw err

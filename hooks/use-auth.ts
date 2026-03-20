@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase/client'
 import type { User } from '@supabase/supabase-js'
 
 export function useAuth() {
@@ -11,6 +11,7 @@ export function useAuth() {
     // Get initial session
     const getSession = async () => {
       try {
+        const supabase = createClient()
         const {
           data: { session },
           error: err,
@@ -27,6 +28,7 @@ export function useAuth() {
     getSession()
 
     // Listen for auth changes
+    const supabase = createClient()
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -40,10 +42,12 @@ export function useAuth() {
     async (email: string, password: string, fullName: string, companyName?: string) => {
       setError(null)
       try {
+        const supabase = createClient()
         const { data, error: err } = await supabase.auth.signUp({
           email,
           password,
           options: {
+            emailRedirectTo: `${window.location.origin}/auth/callback`,
             data: {
               full_name: fullName,
               company_name: companyName || '',
@@ -65,6 +69,7 @@ export function useAuth() {
   const signIn = useCallback(async (email: string, password: string) => {
     setError(null)
     try {
+      const supabase = createClient()
       const { data, error: err } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -82,6 +87,7 @@ export function useAuth() {
   const signOut = useCallback(async () => {
     setError(null)
     try {
+      const supabase = createClient()
       const { error: err } = await supabase.auth.signOut()
       if (err) throw err
     } catch (err) {

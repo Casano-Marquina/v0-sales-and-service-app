@@ -1,29 +1,6 @@
-import { createClient } from '@supabase/supabase-js'
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
-
-// Client for use in the browser
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
-
-// Server client with service role (use with caution)
-export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceRoleKey)
-
-// Types
 export type UserRole = 'owner' | 'admin' | 'editor' | 'viewer'
 export type TransactionType = 'venta' | 'compra' | 'servicio'
 export type PaymentStatus = 'pendiente' | 'pagado' | 'vencido' | 'parcial'
-
-export interface User {
-  id: string
-  email: string
-  full_name: string | null
-  company_name: string | null
-  role: UserRole
-  created_at: string
-  updated_at: string
-}
 
 export interface Workspace {
   id: string

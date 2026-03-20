@@ -3,12 +3,12 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '@/hooks/use-auth'
 import { useWorkspace } from '@/hooks/use-workspace'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase/client'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Empty } from '@/components/ui/empty'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import type { Reminder, Transaction } from '@/lib/supabase'
+import type { Reminder, Transaction } from '@/lib/types'
 
 interface ReminderWithTransaction extends Reminder {
   transactions?: Transaction
@@ -26,6 +26,7 @@ export default function RemindersPage() {
     const fetchReminders = async () => {
       try {
         setLoading(true)
+        const supabase = createClient()
         const { data, error } = await supabase
           .from('reminders')
           .select(

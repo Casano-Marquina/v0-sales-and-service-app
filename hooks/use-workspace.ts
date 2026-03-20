@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
-import type { Workspace, WorkspaceMember } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase/client'
+import type { Workspace, WorkspaceMember } from '@/lib/types'
 
 export function useWorkspace(userId?: string) {
   const [workspaces, setWorkspaces] = useState<Workspace[]>([])
@@ -18,6 +18,7 @@ export function useWorkspace(userId?: string) {
     const fetchWorkspaces = async () => {
       try {
         setLoading(true)
+        const supabase = createClient()
         // First, get workspaces owned by user
         const { data: ownedWorkspaces, error: ownedError } = await supabase
           .from('workspaces')
@@ -66,6 +67,7 @@ export function useWorkspace(userId?: string) {
       if (!userId) throw new Error('User not authenticated')
 
       try {
+        const supabase = createClient()
         const { data, error: err } = await supabase
           .from('workspaces')
           .insert([{ name, owner_id: userId }])
@@ -86,6 +88,7 @@ export function useWorkspace(userId?: string) {
 
   const updateWorkspace = useCallback(async (id: string, updates: Partial<Workspace>) => {
     try {
+      const supabase = createClient()
       const { data, error: err } = await supabase
         .from('workspaces')
         .update(updates)
@@ -108,6 +111,7 @@ export function useWorkspace(userId?: string) {
   const addMember = useCallback(
     async (workspaceId: string, userId: string, role: 'admin' | 'editor' | 'viewer') => {
       try {
+        const supabase = createClient()
         const { data, error: err } = await supabase
           .from('workspace_members')
           .insert([{ workspace_id: workspaceId, user_id: userId, role }])

@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Field, FieldLabel, FieldGroup } from '@/components/ui/field'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import type { Transaction, TransactionType, Category } from '@/lib/supabase'
+import type { Transaction, TransactionType, Category } from '@/lib/types'
 
 interface TransactionFormProps {
   onSubmit: (data: any) => Promise<void>

@@ -1,6 +1,6 @@
 import Papa from 'papaparse'
 import * as XLSX from 'xlsx'
-import type { Transaction, TransactionType, PaymentStatus } from '@/lib/supabase'
+import type { Transaction, TransactionType, PaymentStatus } from '@/lib/types'
 
 export interface ImportData {
   date: string
